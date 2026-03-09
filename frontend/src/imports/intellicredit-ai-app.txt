@@ -1,0 +1,626 @@
+
+
+Design and generate a **complete production-ready frontend web application** for **Intelli-Credit AI**, an enterprise B2B fintech platform used by credit risk analysts to evaluate companies using AI.
+
+The platform allows analysts to upload financial PDFs, run AI credit analysis, review results, and download a **Credit Appraisal Memo (CAM)**.
+
+Generate **full working code**, not only UI.
+
+---
+
+# Technology Stack
+
+Use the following stack:
+
+```
+Next.js 14 (App Router)
+TypeScript
+TailwindCSS
+ShadCN UI
+Recharts
+Axios
+React Hook Form
+Lucide Icons
+```
+
+Project must be **fully responsive and production ready**.
+
+---
+
+# Backend API
+
+The application connects to a FastAPI backend with these endpoints:
+
+```
+POST /upload
+GET /history
+GET /evaluation/{id}
+```
+
+### POST /upload response
+
+Example response:
+
+```json
+{
+  "evaluation_id": 12,
+  "filename": "company.pdf",
+  "financial_data": {
+    "revenue": 212143,
+    "net_profit": 40121,
+    "total_debt": 1504242
+  },
+  "ratios": {
+    "profit_margin": 0.18,
+    "debt_to_revenue": 7.09
+  },
+  "credit_decision": {
+    "decision": "APPROVE",
+    "interest_rate_percent": 10,
+    "suggested_loan_limit": 180
+  },
+  "explanation": {
+    "summary": "Company leverage appears manageable."
+  },
+  "pdf_path": "outputs/company_CAM.pdf"
+}
+```
+
+---
+
+### GET /history response
+
+Returns:
+
+```json
+[
+  {
+    "id": 1,
+    "company_name": "companyA.pdf",
+    "revenue": 300000,
+    "risk_score": 72,
+    "decision": "APPROVE"
+  }
+]
+```
+
+---
+
+### GET /evaluation/{id}
+
+Returns full evaluation object.
+
+---
+
+# Design System
+
+Create a **premium fintech SaaS UI similar to Stripe or Ramp dashboards**.
+
+### Dark Mode (default)
+
+```
+Background: #0F172A
+Card: #1E293B
+Accent: #6366F1
+Text: #E2E8F0
+```
+
+### Status Colors
+
+```
+Approved: #10B981
+Pending: #F59E0B
+Rejected: #EF4444
+```
+
+### Typography
+
+```
+Font: Inter
+```
+
+### UI style
+
+```
+glassmorphism cards
+soft shadows
+8px rounded corners
+smooth hover animations
+loading skeletons
+```
+
+---
+
+# Layout Structure
+
+Create a persistent **dashboard layout**.
+
+### Sidebar
+
+Left fixed sidebar.
+
+Logo:
+
+```
+Intelli-Credit AI
+```
+
+Navigation items:
+
+```
+Dashboard
+New Appraisal
+Pending Drafts
+Evaluation History
+Reports
+Settings
+```
+
+Bottom section:
+
+User card:
+
+```
+Avatar
+Name
+Role: Credit Risk Analyst
+```
+
+---
+
+### Top Header
+
+Contains:
+
+```
+Breadcrumb navigation
+Search input
+Notifications icon
+Dark/light toggle
+User dropdown
+```
+
+---
+
+# Page 1 — Dashboard
+
+Route:
+
+```
+/dashboard
+```
+
+Show analytics overview.
+
+### KPI Cards
+
+```
+Total Evaluations
+Pending Drafts
+Average Risk Score
+Approval Rate
+```
+
+Include:
+
+```
+trend arrow
+sparkline chart
+```
+
+---
+
+### Main Chart
+
+Line chart:
+
+```
+Credit Evaluations by Industry
+```
+
+Use **Recharts**.
+
+Industries:
+
+```
+Manufacturing
+Technology
+Retail
+Real Estate
+Hospitality
+Pharma
+```
+
+---
+
+### Recent Evaluations Table
+
+Fetch from:
+
+```
+GET /history
+```
+
+Columns:
+
+```
+Company
+Revenue
+Risk Score
+Decision
+Action
+```
+
+Action:
+
+```
+View Report
+```
+
+Navigate to:
+
+```
+/evaluation/{id}
+```
+
+---
+
+# Page 2 — New Appraisal
+
+Route:
+
+```
+/new-appraisal
+```
+
+Purpose: upload financial documents.
+
+### Upload Component
+
+Drag-and-drop upload area.
+
+Text:
+
+```
+Drag & drop financial PDFs
+or click to browse
+```
+
+Allow multiple files.
+
+Use `FormData` to send files.
+
+Call API:
+
+```
+POST /upload
+```
+
+Show:
+
+```
+upload progress
+loading spinner
+success state
+```
+
+After successful upload:
+
+```
+redirect to /evaluation/{evaluation_id}
+```
+
+---
+
+# Page 3 — Pending Drafts
+
+Route:
+
+```
+/drafts
+```
+
+Show table of pending evaluations.
+
+Columns:
+
+```
+Draft ID
+Company
+Industry
+Date Created
+AI Confidence
+Status
+Action
+```
+
+Action:
+
+```
+Review Draft
+```
+
+---
+
+# Draft Review Interface
+
+Split screen layout.
+
+### Left side
+
+Embedded **PDF viewer**.
+
+Use:
+
+```
+react-pdf
+```
+
+Features:
+
+```
+page navigation
+zoom
+scroll
+```
+
+---
+
+### Right side
+
+Editable form:
+
+```
+Revenue
+Net Profit
+Total Debt
+```
+
+Show:
+
+```
+AI extracted value
+confidence badge
+editable input
+```
+
+Buttons:
+
+```
+Save Draft
+Finalize Evaluation
+```
+
+---
+
+# Page 4 — Evaluation Result
+
+Route:
+
+```
+/evaluation/[id]
+```
+
+Fetch data from:
+
+```
+GET /evaluation/{id}
+```
+
+---
+
+### Header
+
+Display:
+
+```
+Company Name
+Evaluation Date
+Decision Badge
+```
+
+Example:
+
+```
+APPROVED
+```
+
+Green badge.
+
+---
+
+### Risk Score Gauge
+
+Circular gauge chart displaying:
+
+```
+Final Risk Score
+```
+
+---
+
+### Risk Breakdown
+
+Cards:
+
+```
+Base Risk Score
+External Risk Adjustment
+Final Score
+```
+
+---
+
+### Financial Metrics
+
+Grid layout:
+
+```
+Revenue
+Net Profit
+Total Debt
+Profit Margin
+Debt to Revenue
+```
+
+---
+
+### AI Explanation
+
+Card titled:
+
+```
+AI Decision Rationale
+```
+
+Display explanation text returned from backend.
+
+---
+
+### CAM Download
+
+Button:
+
+```
+Download CAM PDF
+```
+
+Link:
+
+```
+pdf_path
+```
+
+---
+
+# Page 5 — Evaluation History
+
+Route:
+
+```
+/history
+```
+
+Fetch:
+
+```
+GET /history
+```
+
+Table columns:
+
+```
+Evaluation ID
+Company
+Revenue
+Risk Score
+Decision
+Date
+Actions
+```
+
+Include:
+
+```
+sorting
+search
+filter
+```
+
+---
+
+# Reusable Components
+
+Create reusable components:
+
+```
+Sidebar
+Navbar
+MetricCard
+ChartCard
+FileUpload
+DataTable
+ScoreGauge
+PDFViewer
+DecisionBadge
+LoadingSkeleton
+```
+
+---
+
+# API Layer
+
+Create:
+
+```
+/lib/api.ts
+```
+
+Functions:
+
+```
+uploadDocuments(files)
+getHistory()
+getEvaluation(id)
+```
+
+Use **Axios**.
+
+Base URL must come from:
+
+```
+NEXT_PUBLIC_API_URL
+```
+
+---
+
+# Folder Structure
+
+```
+/app
+  /dashboard
+  /new-appraisal
+  /drafts
+  /evaluation/[id]
+  /history
+
+/components
+  /layout
+  /ui
+  /charts
+  /tables
+
+/lib
+  api.ts
+
+/hooks
+  useEvaluations.ts
+```
+
+---
+
+# Required Features
+
+Implement:
+
+```
+loading states
+error handling
+empty states
+responsive design
+dark/light mode
+```
+
+---
+
+# Expected Output
+
+Generate a **complete Next.js project** with:
+
+* working pages
+* reusable components
+* API integration
+* Tailwind styling
+* production folder structure
+
+The UI must look like a **premium fintech SaaS dashboard used by banks and credit analys
