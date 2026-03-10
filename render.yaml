@@ -40,7 +40,7 @@ services:
     name: intelli-credit-celery-worker
     runtime: docker
     dockerfilePath: ./Dockerfile
-    dockerCommand: celery -A services.worker.celery_app worker --loglevel=info
+    startCommand: celery -A services.worker.celery_app worker --loglevel=info
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -65,4 +65,3 @@ services:
     name: intelli-credit-redis
     plan: free
     maxmemoryPolicy: noeviction
-    ipAllowList: []   # Empty = internal access only (Celery worker only)

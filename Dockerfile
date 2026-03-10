@@ -27,10 +27,10 @@ RUN mkdir -p uploads outputs
 EXPOSE 8000
 
 # Production startup: 4 workers, uvicorn ASGI
-CMD ["gunicorn", "main:app", \
-     "-w", "4", \
-     "-k", "uvicorn.workers.UvicornWorker", \
-     "--bind", "0.0.0.0:8000", \
-     "--timeout", "120", \
-     "--access-logfile", "-", \
-     "--error-logfile", "-"]
+CMD gunicorn main:app \
+     -w 4 \
+     -k uvicorn.workers.UvicornWorker \
+     --bind 0.0.0.0:${PORT:-8000} \
+     --timeout 120 \
+     --access-logfile - \
+     --error-logfile -
